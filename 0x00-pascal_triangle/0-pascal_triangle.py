@@ -2,6 +2,8 @@
 """
 The Pascal's triangle as a list of lists
 """
+
+
 def pascal_triangle(n):
     """
     Returns a list of lists of integers representing
