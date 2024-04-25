@@ -1,42 +1,42 @@
 #!/usr/bin/python3
-"""
-The Pascal's triangle as a list of lists
-"""
+'''Module for working with Pascal's triangle.
+
+This module provides functionality to generate Pascal's
+triangle up to a given integer.
+'''
 
 
 def pascal_triangle(n):
-    """
-    Returns a list of lists of integers representing
-    the Pascal's triangle of n.
+    '''Creates a list of lists representing Pascal's triangle.
 
     Args:
-        n (int): The number of rows in the Pascal's triangle.
+        n (int): The number of rows to generate in the Pascal's triangle.
 
     Returns:
-        list: The Pascal's triangle as a list of lists.
+        list: A list of lists representing Pascal's triangle.
 
     Raises:
-        ValueError: If n is less than or equal to 0.
+        TypeError: If the input `n` is not an integer.
+        ValueError: If the input `n` is less than or equal to 0.
+    '''
+    triangle = []
 
-    """
     try:
-        # Check for invalid input
-        if n <= 0:
-            raise ValueError("n should be greater than 0.")
+        if type(n) is not int or n <= 0:
+            raise ValueError("Input must be a positive integer.")
 
-        # Initialize the Pascal's triangle
-        triangle = [[1]]
+        for i in range(n):
+            line = []
+            for j in range(i + 1):
+                if j == 0 or j == i:
+                    line.append(1)
+                elif i > 0 and j > 0:
+                    line.append(triangle[i - 1][j - 1] + triangle[i - 1][j])
+            triangle.append(line)
 
-        # Generate the remaining rows of the triangle
-        for i in range(1, n):
-            row = [1]  # The first element of each row is always 1
-            for j in range(1, i):
-                # Calculate the element by summing the two elements above it
-                element = triangle[i - 1][j - 1] + triangle[i - 1][j]
-                row.append(element)
-            row.append(1)  # The last element of each row is always 1
-            triangle.append(row)
-
+    except (TypeError, ValueError) as e:
+        # Print error message or handle the exception as needed
+        print(f"Error: {str(e)}")
         return triangle
-    except ValueError as e:
-        print("Error:", str(e))
+
+    return triangle
