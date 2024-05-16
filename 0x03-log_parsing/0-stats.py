@@ -14,25 +14,25 @@ def extract_input(input_line):
     dict: A dictionary containing the extracted information.
     The function uses regular expressions to extract the IP address,
     date, request, status code, and file size from the input line.
-    If the input line matches the expected format, the function populates 
+    If the input line matches the expected format, the function populates
     a dictionary with the extracted information and returns it.
-    If the input line does not match the expected format, the function returns 
+    If the input line does not match the expected format, the function returns
     a dictionary with default values for status code and file size.
     '''
     try:
-        
+        log_fmt = '{}\\-{}{}{}{}\\s*'
         fpl = (
-            r'\s*(?P<ip>\S+)\s*',
-            r'\s*\[(?P<date>\d+\-\d+\-\d+ \d+:\d+:\d+\.\d+)\]',
-            r'\s*"(?P<request>[^"]*)"\s*',
-            r'\s*(?P<status_code>\S+)',
-            r'\s*(?P<file_size>\d+)'
-        )
+                r'\s*(?P<ip>\S+)\s*',
+                r'\s*\[(?P<date>\d+\-\d+\-\d+ \d+:\d+:\d+\.\d+)\]',
+                r'\s*"(?P<request>[^"]*)"\s*',
+                r'\s*(?P<status_code>\S+)',
+                r'\s*(?P<file_size>\d+)'
+                )
         info = {
-            'status_code': 0,
-            'file_size': 0,
-        }
-        log_fmt = '{}\\-{}{}{}{}\\s*'.format(fpl[0], fpl[1], fpl[2], fpl[3], fpl[4])
+                'status_code': 0,
+                'file_size': 0,
+                }
+        log_fmt = log_fmt.format(fpl[0], fpl[1], fpl[2], fpl[3], fpl[4])
         resp_match = re.fullmatch(log_fmt, input_line)
         if resp_match is not None:
             status_code = resp_match.group('status_code')
@@ -43,7 +43,6 @@ def extract_input(input_line):
     except Exception as e:
         print(e, flush=True)
         return None
-
 
 
 def print_statistics(total_file_size, status_codes_stats):
@@ -93,20 +92,20 @@ def update_metrics(line, total_file_size, status_codes_stats):
         to retrieve the metrics.
         total_file_size (int): The total file size
         accumulated from the HTTP request log.
-        status_codes_stats (dict): 
-        A dictionary containing 
+        status_codes_stats (dict):
+        A dictionary containing
         the frequency of each HTTP status
         code encountered in the log.
 
     Returns:
         int: The new total file size.
 
-    Updates the 'status_codes_stats' dictionary 
+    Updates the 'status_codes_stats' dictionary
     by incrementing the count of the HTTP status
     code found in the 'line' input.
     Also, it updates the 'total_file_size' by
     adding the 'file_size' from the 'line_info' dictionary.
-        
+
     '''
     try:
         line_info = extract_input(line)
@@ -150,23 +149,23 @@ def run():
     strline_num = 0
     tot_file_size = 0
     stat_codes_stats = {
-        '200': 0,
-        '301': 0,
-        '400': 0,
-        '401': 0,
-        '403': 0,
-        '404': 0,
-        '405': 0,
-        '500': 0,
-    }
+            '200': 0,
+            '301': 0,
+            '400': 0,
+            '401': 0,
+            '403': 0,
+            '404': 0,
+            '405': 0,
+            '500': 0,
+            }
     try:
         while True:
             line = input()
             tot_file_size = update_metrics(
-                line,
-                tot_file_size,
-                stat_codes_stats,
-            )
+                    line,
+                    tot_file_size,
+                    stat_codes_stats,
+                    )
             strline_num += 1
             if strline_num % 10 == 0:
                 print_statistics(tot_file_size, stat_codes_stats)
