@@ -1,7 +1,7 @@
 #!/usr/bin/node
 
 /**
- * This script fetches and displays Star Wars characters 
+ * This script fetches and displays Star Wars characters
  * based on the provided movie ID.
  *
  * @param {number} process.argv[2] - The ID of the Star Wars movie.
